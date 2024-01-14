@@ -1,0 +1,6 @@
+[submodule "dependencies/injector"]
+	path = dependencies/injector
+	url = https://github.com/thelink2012/injector
+[submodule "dependencies/dx9"]
+	path = dependencies/dx9
+	url = https://github.com/hrydgard/minidx9.git
