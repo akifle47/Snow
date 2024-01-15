@@ -24,7 +24,7 @@
     <ProjectGuid>{b8fd8f64-98bc-4f63-9a75-900c49f93b8d}</ProjectGuid>
     <RootNamespace>Snow</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>snow</ProjectName>
+    <ProjectName>Snow</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -75,16 +75,16 @@
     <TargetExt>.asi</TargetExt>
     <CopyLocalDeploymentContent>true</CopyLocalDeploymentContent>
     <OutDir>$(SolutionDir)build\$(Configuration)\bin\</OutDir>
-    <IncludePath>C:\vs\Snow\dependencies\dx9\Include;C:\vs\Snow\dependencies\injector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vs\Snow\dependencies\dx9\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\dependencies\dx9\Include;$(SolutionDir)\dependencies\injector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\dependencies\dx9\Lib\x86;$(LibraryPath)</LibraryPath>
     <IntDir>build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.asi</TargetExt>
     <CopyLocalDeploymentContent>true</CopyLocalDeploymentContent>
     <OutDir>$(SolutionDir)build\$(Configuration)\bin\</OutDir>
-    <IncludePath>C:\vs\Snow\dependencies\dx9\Include;C:\vs\Snow\dependencies\injector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vs\Snow\dependencies\dx9\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\dependencies\dx9\Include;$(SolutionDir)\dependencies\injector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\dependencies\dx9\Lib\x86;$(LibraryPath)</LibraryPath>
     <IntDir>build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
