@@ -38,6 +38,12 @@ BOOL WINAPI DllMain(HINSTANCE, DWORD fdwReason, LPVOID)
 {
 	if(fdwReason == DLL_PROCESS_ATTACH)
 	{
+		if(*(uint32_t *)Utils::ReadMemory(0x208C34) != 0x404B100F)
+		{
+			MessageBox(0, L"Only version 1.0.8.0 is supported", L"Snow.asi", MB_ICONERROR | MB_OK);
+			return false;
+		}
+
 		CRenderPhaseDeferredLighting_LightsToScreen__BuildRenderListO = *(void(__cdecl **)())Utils::ReadMemory(0x9E4874);
 		Utils::WriteMemory(0x9E4874, CRenderPhaseDeferredLighting_LightsToScreen__BuildRenderListH);
 
