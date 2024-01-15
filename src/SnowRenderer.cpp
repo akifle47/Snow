@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "SnowRenderer.h"
 
-#define LOG_DEPTH 0
+#define LOG_DEPTH 1
 
 namespace SnowRenderer
 {
