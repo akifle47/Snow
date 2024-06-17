@@ -82,8 +82,8 @@ namespace SnowRenderer
 			}
 		}
 
-		//movss xmm0, dword ptr [esi + eax * 1 + 0x4C] or xmm0 = Lights::mRenderLights[i].mTxdId
-		uint8_t buffer[] = {0x44, 0x06, 0x4C, 0x90, 0x90};
+		//movss xmm0, dword ptr [esi + eax * 1 + 0xC] or xmm0 = Lights::mRenderLights[i].field_C
+		uint8_t buffer[] = {0x44, 0x06, 0xC, 0x90, 0x90};
 		Utils::WriteMemory(0x630B00, buffer, 5);
 
 		rage::Functor0 onLostCB = rage::Functor0(NULL, OnDeviceLost, NULL, 0);
@@ -934,11 +934,11 @@ namespace SnowRenderer
 	void OnAfterCopyLight(rage::CLightSource *light)
 	{
 		//CLightSource doesnt have a member to control the volume intensity so
-		//i abuse type casting to use mTxdId for it as im p sure its only used for headlights anyway
+		//i abuse type casting to use field_C for it as im p sure its just padding anyway
 
 		if(light->mFlags & 8 /*volumetric*/)
 		{
-			*(float*)&light->mTxdId = 1.0f;
+			*(float*)&light->field_C = 1.0f;
 		}
 		else if(light->mType == rage::LT_SPOT && !(light->mFlags & 0x300)/*vehicles and traffic lights*/)
 		{
@@ -948,8 +948,7 @@ namespace SnowRenderer
 				light->mVolumeScale = 0.5f;
 				//light->field_64 = -1; //not really sure what this is but setting it to -1 makes the light not cast shadows
 				light->mFlags |= 8;
-				*(float*)&light->mTxdId = mVolumeIntensity;
-				//light->mPosition.z += 0.1f;
+				*(float*)&light->field_C = mVolumeIntensity;
 			}
 		}
 	}
