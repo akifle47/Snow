@@ -49,7 +49,11 @@ PSOut main(PSIn psIn)
 	float ao = tex2D(GBufferSpecularAoSampler, psIn.TexCoord).z;
 	
 	float treeMask = abs(stencil - (LOG_DEPTH ? 6.0 : 3.0)) < 0.1 ? 1.0 : 0.0;
-	float objectMask = stencil > 0.0 ? 0.0 : 1.0;
+	float objectMask = 0.0;
+	if(stencil < 0.99 || abs(stencil - 128.0) < 0.1)
+	{
+		objectMask = 1.0;
+	}
 	
 	float3 posWS = psIn.TexCoord1.xyz / -depth + ViewInverse[3].xyz;
 	const float3 snowDir = float3(0.001425, -0.00771, 0.996);

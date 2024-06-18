@@ -925,9 +925,9 @@ namespace SnowRenderer
 		{
 			case CWeather::RAIN:
 			case CWeather::DRIZZLE:
-			return true;
-				default:
-			return false;
+				return true;
+			default:
+				return false;
 		}
 	}
 
