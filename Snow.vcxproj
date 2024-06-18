@@ -153,6 +153,7 @@
     <ClCompile Include="src\SnowRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\EmbeddedShaders.h" />
     <ClInclude Include="src\rage\Vector.h" />
     <ClInclude Include="src\rage\Weather.h" />
     <ClInclude Include="src\rage\FunctorBase.h" />

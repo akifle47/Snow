@@ -1,5 +1,5 @@
-//compile with fxc with "/T ps_3_0 /nologo /Fo Snow.pso Snow.ps" and export the bytecode with your preferred hex editor or whatever
-#define LOG_DEPTH 1
+//compile with fxc with "/T ps_3_0 /nologo /Fh Snow.ps.h Snow.ps" and copy the hex listing at the end of the file
+#define LOG_DEPTH 0
 
 uniform sampler2D GBufferNormalSampler : register(s0);
 uniform sampler2D GBufferSpecularAoSampler : register(s1);
@@ -48,7 +48,7 @@ PSOut main(PSIn psIn)
 	float stencil = tex2D(GBufferStencilSampler, psIn.TexCoord).x * 255.0;
 	float ao = tex2D(GBufferSpecularAoSampler, psIn.TexCoord).z;
 	
-	float treeMask = abs(stencil - (LOG_DEPTH ? 6.0 : 3.0)) < 0.1 ? 1.0 : 0.0;
+	float treeMask = abs(stencil - 3.0) < 0.1 ? 1.0 : 0.0;
 	float objectMask = 0.0;
 	if(stencil < 0.99 || abs(stencil - 128.0) < 0.1)
 	{

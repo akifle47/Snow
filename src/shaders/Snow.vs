@@ -1,4 +1,4 @@
-//compile with fxc with "/T vs_3_0 /nologo /Fo Snow.vso Snow.vs" and export the bytecode with your preferred hex editor or whatever
+//compile with fxc with "/T vs_3_0 /nologo /Fh Snow.vs.h Snow.vs" and copy the hex listing at the end of the file
 uniform float4 DeferredProjParams : register(c0);
 uniform row_major float4x4 ViewInverse : register(c1);
 uniform float4 PixelOffset : register(c5);
