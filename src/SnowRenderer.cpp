@@ -21,6 +21,8 @@ namespace SnowRenderer
 	IDirect3DVertexShader9 *mBlitVS;
 	IDirect3DPixelShader9 *mBlitPS;
 
+	uint32_t *mFrameIndex = nullptr;
+	uint32_t mHeightRenderPhase = 0;
 	rage::grcRenderTargetPC *mDiffuseRT;
 	rage::grcRenderTargetPC *mNormalRT;
 	rage::grcRenderTargetPC *mSpecularAoRT;
@@ -86,6 +88,11 @@ namespace SnowRenderer
 		//movss xmm0, dword ptr [esi + eax * 1 + 0xC] or xmm0 = Lights::mRenderLights[i].field_C
 		uint8_t buffer[] = {0x44, 0x06, 0xC, 0x90, 0x90};
 		Utils::WriteMemory(0x630B00, buffer, 5);
+
+		mFrameIndex = *(uint32_t**)Utils::ReadMemory(0x455DA7);
+		mFrameIndex = (uint32_t*)((uint8_t*)mFrameIndex + 0xFC4);
+		//todo: breaks on device loss fix it!!!
+		mHeightRenderPhase = (uint32_t)**(uint32_t***)Utils::ReadMemory(0x888961);
 
 		rage::Functor0 onLostCB = rage::Functor0(NULL, OnDeviceLost, NULL, 0);
 		rage::Functor0 onResetCB = rage::Functor0(NULL, OnDeviceReset, NULL, 0);
@@ -268,9 +275,9 @@ namespace SnowRenderer
 
 		if(HasSnow(prevWeather) || HasSnow(currWeather) || HasSnow(nextWeather))
 		{
-			DWORD prevMinFilters[5];
-			DWORD prevMagFilters[5];
-			for(uint32_t i = 0; i < 5; i++)
+			DWORD prevMinFilters[6];
+			DWORD prevMagFilters[6];
+			for(uint32_t i = 0; i < 6; i++)
 			{
 				device->GetSamplerState(i, D3DSAMP_MINFILTER, &prevMinFilters[i]);
 				device->GetSamplerState(i, D3DSAMP_MAGFILTER, &prevMagFilters[i]);
@@ -339,15 +346,29 @@ namespace SnowRenderer
 			threshold.y = pow(threshold.y, 0.20f);
 			threshold.x = max(0.9999f, (threshold.y / (threshold.y + 0.15f)) * 1.15f);
 
+			rage::Vector4 *v1 = (rage::Vector4*)((mHeightRenderPhase + 0x9B0) + sizeof(rage::Vector4) * *mFrameIndex);
+			rage::Vector4 *v2 = (rage::Vector4*)((mHeightRenderPhase + 0x9D0) + sizeof(rage::Vector4) * *mFrameIndex);
+			rage::Vector4 heightMapTransformMtx[4]
+			{
+				{v1->x, 0.0f,  0.0f,  0.0f},
+				{0.0f,  v1->y, 0.0f,  0.0f},
+				{0.0f,  0.0f,  v1->z, 0.0f},
+				{v2->x, v2->y, v2->z, 1.0f}
+			};
+
 			device->SetPixelShaderConstantF(0, &threshold.x, 1);
 			device->SetPixelShaderConstantF(1, &projParams.x, 1);
 			device->SetPixelShaderConstantF(2, &currGrcViewport->mViewInverseMatrix[0][0], 4);
+			device->SetPixelShaderConstantF(6, &heightMapTransformMtx[0].x, 4);
+
+			rage::grcRenderTargetPC *heightRT = *(rage::grcRenderTargetPC**)(mHeightRenderPhase + 0x9A4);
 
 			device->SetTexture(0, mNormalRtCopy->mD3DTexture);
 			device->SetTexture(1, mSpecularAoRT->mD3DTexture);
 			device->SetTexture(2, mStencilRT->mD3DTexture);
 			device->SetTexture(3, mDepthRT->mD3DTexture);
 			device->SetTexture(4, mSnowTexture);
+			device->SetTexture(5, heightRT->mD3DTexture);
 
 			device->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);
 
